@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Feedback</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+
+<div class="form-container">
+    <h2>We Value Your Feedback</h2>
+    <form id="feedbackForm">
+        
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" required placeholder="John Doe">
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" required>
+                <option value="" disabled selected>Select a category...</option>
+                <option value="Support">Support</option>
+                <option value="Billing">Billing</option>
+                <option value="Product">Product</option>
+                <option value="UI">UI</option>
+                <option value="Performance">Performance</option>
+                <option value="Feature Request">Feature Request</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="rating">Rating (1 - 5)</label>
+            <input type="number" id="rating" min="1" max="5" required placeholder="5">
+        </div>
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" required placeholder="Tell us about your experience..."></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn">Submit Feedback</button>
+        <div id="statusMessage" class="status"></div>
+    </form>
+</div>
+<script src="scripts/script.js"></script>
+</body>
+</html>
