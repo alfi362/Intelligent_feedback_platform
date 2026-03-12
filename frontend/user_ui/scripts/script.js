@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setLoadingState(true);
 
         try {
-            const API_URL = 'https://2g12y1bgwl.execute-api.ap-south-1.amazonaws.com/feedback';
+            const API_URL = 'https://2g12y1bgwl.execute-api.ap-south-1.amazonaws.com/prod/feedback';
             
             const response = await fetch(API_URL, {
                 method: 'POST',
