@@ -1,4 +1,4 @@
-# Intelligent_feedback_platform
+# Intelligent Feedback Platform
 
 A serverless feedback analysis platform that collects user feedback, enriches it with AI-powered sentiment analysis, and provides a real-time analytics dashboard with automated alerts for negative feedback.
 The system uses an event-driven architecture built entirely on managed cloud services.
