@@ -38,31 +38,31 @@ The system uses an event-driven architecture built entirely on managed cloud ser
 * Amazon S3 (static frontend hosting)
 
 ## How It Works
-### 1. Feedback Submission
+#### 1. Feedback Submission
 
 Users submit feedback through the frontend form. The data is sent to an API endpoint managed by API Gateway.
 
-### 2. Data Storage
+#### 2. Data Storage
 
 A Lambda function validates the request and stores the feedback in DynamoDB.
 
-### 3. Stream Trigger
+#### 3. Stream Trigger
 
 DynamoDB Streams detects the new record and triggers a processing Lambda.
 
-### 4. Sentiment Analysis
+#### 4. Sentiment Analysis
 
 The enrichment Lambda sends the feedback text to a sentiment analysis microservice powered by Amazon Comprehend.
 
-### 5. Data Enrichment
+#### 5. Data Enrichment
 
 The sentiment result is written back to the original DynamoDB record.
 
-### 6. Alert System
+#### 6. Alert System
 
 If the sentiment is negative and the rating is low, an SNS alert is triggered and an email notification is sent.
 
-### 7. Dashboard
+#### 7. Dashboard
 
 The admin dashboard fetches data from secured API endpoints and visualizes analytics using charts.
 
