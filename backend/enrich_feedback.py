@@ -1,47 +1,66 @@
 import json
 import boto3
-import logging
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-dynamodb = boto3.client('dynamodb', region_name='ap-south-1')
+import urllib.request
+
+
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table("FeedbackTable")
+
+sns = boto3.client("sns")
+
+SENTIMENT_API = "https://cl8wfj3438.execute-api.ap-south-1.amazonaws.com/sentiment"
+SNS_TOPIC_ARN = "arn:aws:sns:ap-south-1:762397612134:negative-feedback"
 
 def lambda_handler(event, context):
-    logger.info("Stream event received: " + json.dumps(event))
 
-    for record in event.get('Records', []):
-        if record.get('eventName') == 'INSERT':
-            try:
-                new_item = record['dynamodb']['NewImage']
-                feedback_id = new_item['feedback_id']['S']
-                message = new_item.get('message', {}).get('S', '').lower()
-                sentiment_label = "NEUTRAL"
-                negative_words = ["bad", "worst", "terrible", "hate", "broken", "awful", "frustrated", "poor"]
-                positive_words = ["good", "great", "excellent", "love", "awesome", "amazing", "best"]
+    for record in event["Records"]:
 
-                if any(word in message for word in negative_words):
-                    sentiment_label = "NEGATIVE"
-                elif any(word in message for word in positive_words):
-                    sentiment_label = "POSITIVE"
-                dynamodb.update_item(
-                    TableName="FeedbackTable",
-                    Key={
-                        'feedback_id': {'S': feedback_id}
-                    },
-                    UpdateExpression="SET sentiment = :s, #status = :st",
-                    ExpressionAttributeNames={
-                        "#status": "status"
-                    },
-                    ExpressionAttributeValues={
-                        ":s": {'S': sentiment_label},
-                        ":st": {'S': "ANALYZED"}
-                    }
-                )
-                logger.info(f"Success! Analyzed {feedback_id} as {sentiment_label}")
+        if record["eventName"] != "INSERT":
+            continue
 
-            except Exception as e:
-                logger.error(f"Error processing stream record: {str(e)}")
+        item = record["dynamodb"]["NewImage"]
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps('Stream processed successfully')
-    }
+        feedback_id = item["feedback_id"]["S"]
+        message = item["message"]["S"]
+        rating = int(item["rating"]["N"])
+        name = item["name"]["S"]
+        category = item["category"]["S"]
+
+        # Call sentiment API
+        req = urllib.request.Request(
+            SENTIMENT_API,
+            data=json.dumps({"text": message}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+
+        with urllib.request.urlopen(req) as res:
+            result = json.loads(res.read().decode())
+
+        sentiment = result["sentiment"]
+
+        # Update DynamoDB
+        table.update_item(
+            Key={"feedback_id": feedback_id},
+            UpdateExpression="SET sentiment = :s",
+            ExpressionAttributeValues={
+                ":s": sentiment
+            }
+        )
+
+        # Send SNS alert if negative
+        if sentiment == "NEGATIVE" and rating <= 2:
+
+            sns.publish(
+                TopicArn=SNS_TOPIC_ARN,
+                Subject="Negative Customer Feedback Alert",
+                Message=json.dumps({
+                    "feedback_id": feedback_id,
+                    "name": name,
+                    "rating": rating,
+                    "category": category,
+                    "message": message
+                }, indent=2)
+            )
+
+    return {"statusCode": 200}
