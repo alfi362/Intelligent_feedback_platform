@@ -1,171 +1,38 @@
-# Intelligent Feedback Platform
+# AI-Driven Feedback Analysis Platform
 
-A serverless feedback analysis platform that collects user feedback, enriches it with AI-powered sentiment analysis, and provides a real-time analytics dashboard with automated alerts for negative feedback.
-The system uses an event-driven architecture built entirely on managed cloud services.
+A fully serverless, event-driven feedback collection and analysis system. Users submit feedback through a web interface; the platform automatically analyzes sentiment using AI, stores enriched results, and alerts administrators in real time when negative feedback is detected.
 
-![alt]([https://private-user-images.githubusercontent.com/141355805/562828011-cf719df3-00ba-4969-86b1-09c2a6436baf.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzMzOTg5OTEsIm5iZiI6MTc3MzM5ODY5MSwicGF0aCI6Ii8xNDEzNTU4MDUvNTYyODI4MDExLWNmNzE5ZGYzLTAwYmEtNDk2OS04NmIxLTA5YzJhNjQzNmJhZi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzEzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMxM1QxMDQ0NTFaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0zM2Y2YTQ5ZDViMmJlNDM0NzVmMGI3MGE0ZDM4ZmVmMDFiNTY5NjdkOWYwNDU4ZmM3MmYxYjRkZTc4YTFjMzk5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.DeSXVg3RYnWW2YVQjXZY9CcFhYhQNu40CPN5q_RRcK4](https://private-user-images.githubusercontent.com/141355805/562828011-cf719df3-00ba-4969-86b1-09c2a6436baf.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzM5ODcxNjAsIm5iZiI6MTc3Mzk4Njg2MCwicGF0aCI6Ii8xNDEzNTU4MDUvNTYyODI4MDExLWNmNzE5ZGYzLTAwYmEtNDk2OS04NmIxLTA5YzJhNjQzNmJhZi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMyMFQwNjA3NDBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03NzViOTA2ZWQ3MjM1MjVjYWE2NzYxN2NmOWQ4YWYzZjRmOWM1ODk0Njc2OWM0MDEzNzNjY2M0MTlhYzgxN2IwJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.aqqb83x0A0YFy_RrfKu6TNfERncJOcQOb508XWz73ik))
+## Architecture
 
-## Features
-
-* Collect feedback through a web interface
-
-* Automatically analyze sentiment using AI
-
-* Real-time admin dashboard with charts and analytics
-
-* Automatic alerts for negative feedback
-
-* Fully serverless and event-driven architecture
-
-* Multi-account AI microservice integration
-
-## Architechture Overview
-
-![alt]([https://private-user-images.githubusercontent.com/141355805/562788885-32d317ca-f5f6-40f2-bbcb-733764705d92.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzMzODEyODMsIm5iZiI6MTc3MzM4MDk4MywicGF0aCI6Ii8xNDEzNTU4MDUvNTYyNzg4ODg1LTMyZDMxN2NhLWY1ZjYtNDBmMi1iYmNiLTczMzc2NDcwNWQ5Mi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzEzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMxM1QwNTQ5NDNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04NjE1ZmM1NTI5Y2ViMjJlMWE4Nzc0NmQzODgzZWY2M2VlMjkyZDY5N2UxN2VhNTUwNmZkOTg5NDUzNmMyZDRmJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.GTervwiLkYTS5RCfQM8Va9t0qY6svmC-VbT-tRuOoFE](https://private-user-images.githubusercontent.com/141355805/562788885-32d317ca-f5f6-40f2-bbcb-733764705d92.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzM5ODcxNjAsIm5iZiI6MTc3Mzk4Njg2MCwicGF0aCI6Ii8xNDEzNTU4MDUvNTYyNzg4ODg1LTMyZDMxN2NhLWY1ZjYtNDBmMi1iYmNiLTczMzc2NDcwNWQ5Mi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMyMFQwNjA3NDBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03Mzk4NzFhOTA5MjNhZmYzMGIwODk1MWE0NGRkM2RmMjlmMzJlODU1MGNiZGExMjkyNmIzZDFmZWYxODFjOWYxJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.SXxyN9dc3zrU7ciE4n5e2gAH8ua8gsAUqGfjl9_GGfM))
-
-## Services Used
-
-* AWS Lambda
-
-* Amazon API Gateway
-
-* Amazon DynamoDB
-
-* DynamoDB Streams
-
-* Amazon SNS
-
-* Amazon Comprehend
-
-* Amazon S3 (static frontend hosting)
+- **Amazon S3** — hosts the static frontend (React + TailwindCSS)
+- **Amazon API Gateway** — REST endpoints for feedback submission and admin dashboard
+- **AWS Lambda** — serverless compute for ingestion, enrichment, and alerting
+- **Amazon DynamoDB + DynamoDB Streams** — feedback storage with stream-based event triggers
+- **Amazon Comprehend** — NLP sentiment analysis (cross-account microservice integration)
+- **Amazon SNS + SES** — automated email alerts for negative feedback
+- **Amazon Cognito** — admin dashboard authentication
 
 ## How It Works
-#### 1. Feedback Submission
 
-Users submit feedback through the frontend form. The data is sent to an API endpoint managed by API Gateway.
+1. User submits feedback via the frontend form
+2. API Gateway routes request to the **Ingest Lambda**, which stores it in DynamoDB
+3. **DynamoDB Streams** detects the new record and triggers the **Enrichment Lambda**
+4. Enrichment Lambda calls a **cross-account Comprehend microservice** via API Gateway and writes the sentiment result back to DynamoDB
+5. If sentiment is `NEGATIVE` and rating ≤ 2, an **SNS alert triggers an SES email** to the admin
+6. Admin dashboard fetches enriched data via secured API endpoints and visualizes it with charts
 
-#### 2. Data Storage
+## Cross-Account Integration
 
-A Lambda function validates the request and stores the feedback in DynamoDB.
+To work within AWS free-tier constraints, Amazon Comprehend runs in a separate AWS account exposed via API Gateway. The enrichment Lambda calls this endpoint and processes the returned sentiment — demonstrating real-world cross-account service integration.
 
-#### 3. Stream Trigger
+## Admin Dashboard Features
 
-DynamoDB Streams detects the new record and triggers a processing Lambda.
+- Total feedback count
+- Sentiment distribution (Positive / Neutral / Negative)
+- Category-level analytics
+- Full feedback table with sentiment labels
+- Automatic email alerts for critical negative feedback
 
-#### 4. Sentiment Analysis
+## Tech Stack
 
-The enrichment Lambda sends the feedback text to a sentiment analysis microservice powered by Amazon Comprehend.
-
-#### 5. Data Enrichment
-
-The sentiment result is written back to the original DynamoDB record.
-
-#### 6. Alert System
-
-If the sentiment is negative and the rating is low, an SNS alert is triggered and an email notification is sent.
-
-#### 7. Dashboard
-
-The admin dashboard fetches data from secured API endpoints and visualizes analytics using charts.
-
-## Frontend
-![alt]([https://private-user-images.githubusercontent.com/141355805/562826012-d08ce840-c3de-4793-8c8e-339566e63efb.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzMzOTk1MTAsIm5iZiI6MTc3MzM5OTIxMCwicGF0aCI6Ii8xNDEzNTU4MDUvNTYyODI2MDEyLWQwOGNlODQwLWMzZGUtNDc5My04YzhlLTMzOTU2NmU2M2VmYi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzEzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMxM1QxMDUzMzBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0xZThlNWU3M2QwYzVhYjNkNTI2NGRjZWVjZTk0NTFhYmEwMWQ4ZGVkM2IyYWRiNGZmZDQ1ZjYzZmFhOWYzY2NmJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.x023LYGTU2DXMZb0zAy5WjiYNJXYhL6-lC8jK7eixU8](https://private-user-images.githubusercontent.com/141355805/562826012-d08ce840-c3de-4793-8c8e-339566e63efb.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzM5ODcxNjAsIm5iZiI6MTc3Mzk4Njg2MCwicGF0aCI6Ii8xNDEzNTU4MDUvNTYyODI2MDEyLWQwOGNlODQwLWMzZGUtNDc5My04YzhlLTMzOTU2NmU2M2VmYi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMyMFQwNjA3NDBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04MDZhNWQ0YjI2ZDBhMDFjODNiYmI0N2FkZjQxMjcyZmFlZGE2ZDYzYzRkZjY4ZmUyYzcyZTJkOWFmNzBmYTNiJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.UOaKuVgSMsrqkcdt5v8naNJCysVXAe344PqH-Zhhv70))
-
-### The admin dashboard is built with:
-
-* React
-
-* TailwindCSS
-
-* Chart visualizations
-
-### It displays:
-
-* Total feedback count
-
-* Sentiment distribution
-
-* Category analytics
-
-* Feedback table
-
-### Authentication is handled through Amazon Cognito.
-
-
-## Backend
-
-The backend uses serverless functions.
-
-### Lambda Functions
-
-Ingest Lambda
-Handles feedback submissions and writes them to DynamoDB.
-
-Enrichment Lambda
-Triggered by DynamoDB Streams. Performs sentiment analysis and publishes alerts.
-
-Sentiment Microservice
-Hosted in a separate AWS account to run Amazon Comprehend.
-
-## Deployment
-### Frontend
-
-The frontend can be deployed using static hosting:
-
-* Amazon S3
-
-* CloudFront (optional)
-
-Build command:
-
-```sh
- npm run build
-```
-
-### Backend
-
-Deploy Lambda functions and configure API Gateway routes.
-
-Required API endpoints:
-```sh
-POST /feedback
-GET  /admin/feedback
-GET  /admin/stats
-```
-
-### Environment Configuration
-
-Example configuration values:
-```sh
-API_URL=https://your-api.execute-api.ap-south-1.amazonaws.com
-COGNITO_DOMAIN=https://your-domain.auth.ap-south-1.amazoncognito.com
-CLIENT_ID=your-client-id
-REDIRECT_URI=http://localhost:5173/dashboard
-```
-
-### Example Feedback Record
-```json
-{
- "feedback_id": "abc123",
- "name": "John",
- "rating": 1,
- "category": "Support",
- "message": "The service is terrible",
- "sentiment": "NEGATIVE",
- "created_at": "2026-03-11T15:00:00Z"
-}
-```
-
-### Example Alert Email
-
-Subject
-```sh
-Negative Customer Feedback Alert
-```
-Body
-```sh
-Name: John
-Rating: 1
-Category: Support
-Message: The service is terrible
-```
+`AWS Lambda` `API Gateway` `DynamoDB` `DynamoDB Streams` `Amazon Comprehend` `SNS` `SES` `Cognito` `S3` `React` `TailwindCSS` `Python` `JavaScript`
